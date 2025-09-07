@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Document Viewer — OneDrive</title>
   <style>
-    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:#f6f6f8; color:#111; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:#f6f6f8; color:#111; display:flex; flex-direction:column; height:100vh; }
     .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:white; box-shadow:0 1px 0 rgba(0,0,0,.06); }
     .title { font-weight:600; font-size:16px; }
     .actions { display:flex; gap:8px; align-items:center; }
     .btn { padding:8px 12px; border-radius:8px; border:1px solid #e0e0e6; background:white; cursor:pointer; font-size:14px; }
     .btn.primary { background:#0067b8; color:white; border-color:#005aa0; }
-    .frame-wrap { height: calc(100vh - 56px); display:block; background:#e9edf3; padding:12px; box-sizing:border-box; }
+    .frame-wrap { flex:1; background:#e9edf3; padding:12px; box-sizing:border-box; }
     .viewer { width:100%; height:100%; border:0; border-radius:8px; box-shadow:0 6px 22px rgba(12,20,40,0.08); }
-    .note { font-size:13px; color:#555; margin-left:8px; }
+    .footer { text-align:center; padding:10px; font-size:14px; background:#fff; border-top:1px solid #ddd; }
+    .footer a { color:#0067b8; text-decoration:none; font-weight:500; }
+    .footer a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
@@ -26,31 +28,31 @@
   </div>
 
   <div class="frame-wrap">
-    <!-- Primary embed using Office Online viewer (recommended) -->
-  <iframe 
-  src="https://1drv.ms/w/c/dc8a3fde14495158/IQSbtGZ94vyvRLhgRDzFqruhAYeOifEXkYuOJAkC-uA8fYw?em=2&wdEmbedCode=0&wdPrint=0" 
-  width="100%" 
-  height="100%" 
-  style="min-height:100vh; border:0;"
-  frameborder="0">
-  This is an embedded <a target="_blank" href="https://office.com">Microsoft Office</a> document, powered by 
-  <a target="_blank" href="https://office.com/webapps">Office</a>.
-</iframe>
+    <!-- Primary embed using OneDrive embed link -->
+    <iframe 
+      id="docViewer"
+      src="https://1drv.ms/w/c/dc8a3fde14495158/IQSbtGZ94vyvRLhgRDzFqruhAYeOifEXkYuOJAkC-uA8fYw?em=2&wdEmbedCode=0&wdPrint=0" 
+      width="100%" 
+      height="100%" 
+      style="min-height:100%; border:0;"
+      frameborder="0">
+      This is an embedded <a target="_blank" href="https://office.com">Microsoft Office</a> document, powered by 
+      <a target="_blank" href="https://office.com/webapps">Office</a>.
+    </iframe>
+  </div>
 
-
+  <div class="footer">
+    Made by <strong>Vallabh Padhye</strong> | 
+    <a href="https://www.linkedin.com/in/vallabhpadhye" target="_blank">LinkedIn</a>
   </div>
 
   <script>
-    // Replace this with your actual short link if you ever change it.
     const rawOneDriveLink = "https://1drv.ms/w/c/dc8a3fde14495158/EZu0Zn3i_K9EuGBEPMWqu6EBjC78jU8Q21Q7nrrKCln_jg";
-    // Office embed URL uses the original file URL encoded; we used the short link encoded above.
-    // If the embed fails (CORS/permissions), the button below opens the OneDrive view directly.
     document.getElementById('openTab').addEventListener('click', () => {
       window.open(rawOneDriveLink, '_blank');
     });
     document.getElementById('reloadEmbed').addEventListener('click', () => {
       const iframe = document.getElementById('docViewer');
-      // quick reload trick: swap src to force a refresh
       const src = iframe.src;
       iframe.src = 'about:blank';
       setTimeout(() => iframe.src = src, 120);
