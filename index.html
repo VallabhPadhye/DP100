@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Document Viewer — OneDrive</title>
+  <style>
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:#f6f6f8; color:#111; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:white; box-shadow:0 1px 0 rgba(0,0,0,.06); }
+    .title { font-weight:600; font-size:16px; }
+    .actions { display:flex; gap:8px; align-items:center; }
+    .btn { padding:8px 12px; border-radius:8px; border:1px solid #e0e0e6; background:white; cursor:pointer; font-size:14px; }
+    .btn.primary { background:#0067b8; color:white; border-color:#005aa0; }
+    .frame-wrap { height: calc(100vh - 56px); display:block; background:#e9edf3; padding:12px; box-sizing:border-box; }
+    .viewer { width:100%; height:100%; border:0; border-radius:8px; box-shadow:0 6px 22px rgba(12,20,40,0.08); }
+    .note { font-size:13px; color:#555; margin-left:8px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">Work document — viewer</div>
+    <div class="actions">
+      <button class="btn" id="openTab">Open raw link</button>
+      <button class="btn primary" id="reloadEmbed">Reload embed</button>
+    </div>
+  </div>
+
+  <div class="frame-wrap">
+    <!-- Primary embed using Office Online viewer (recommended) -->
+    <iframe
+      id="docViewer"
+      class="viewer"
+      src="https://view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2F1drv.ms%2Fw%2Fc%2Fdc8a3fde14495158%2FEZu0Zn3i_K9EuGBEPMWqu6EBjC78jU8Q21Q7nrrKCln_jg"
+      allowfullscreen
+      sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+      >
+    </iframe>
+  </div>
+
+  <script>
+    // Replace this with your actual short link if you ever change it.
+    const rawOneDriveLink = "https://1drv.ms/w/c/dc8a3fde14495158/EZu0Zn3i_K9EuGBEPMWqu6EBjC78jU8Q21Q7nrrKCln_jg";
+    // Office embed URL uses the original file URL encoded; we used the short link encoded above.
+    // If the embed fails (CORS/permissions), the button below opens the OneDrive view directly.
+    document.getElementById('openTab').addEventListener('click', () => {
+      window.open(rawOneDriveLink, '_blank');
+    });
+    document.getElementById('reloadEmbed').addEventListener('click', () => {
+      const iframe = document.getElementById('docViewer');
+      // quick reload trick: swap src to force a refresh
+      const src = iframe.src;
+      iframe.src = 'about:blank';
+      setTimeout(() => iframe.src = src, 120);
+    });
+  </script>
+</body>
+</html>
