@@ -57,18 +57,20 @@
   </div>
 
   <script>
-    // Fetch the docx file from public folder
-    fetch("DP100.docx")
-      .then(r => r.arrayBuffer())
-      .then(buffer => {
-        const container = document.getElementById("viewer");
-        window.docx.renderAsync(buffer, container, null);
-      })
-      .catch(err => {
-        document.getElementById("viewer").innerHTML = 
-          "<p style='color:red'>Failed to load document. Check file path.</p>";
-        console.error(err);
-      });
-  </script>
+  // Use the direct download link from OneDrive
+  const docUrl = "https://onedrive.live.com/personal/dc8a3fde14495158/_layouts/15/doc.aspx?resid=7d66b49b-fce2-44af-b860-443cc5aabba1&cid=dc8a3fde14495158";
+
+  fetch(docUrl)
+    .then(r => r.arrayBuffer())
+    .then(buffer => {
+      const container = document.getElementById("viewer");
+      window.docx.renderAsync(buffer, container, null);
+    })
+    .catch(err => {
+      document.getElementById("viewer").innerHTML =
+        "<p style='color:red'>Failed to load document. Check link & permissions.</p>";
+      console.error(err);
+    });
+</script>
 </body>
 </html>
