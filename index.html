@@ -3,60 +3,72 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Document Viewer — OneDrive</title>
+  <title>Word Document Viewer</title>
+
+  <!-- docx-preview library -->
+  <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.1/dist/docx-preview.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docx-preview@0.3.1/dist/docx-preview.css"/>
+
   <style>
-    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:#f6f6f8; color:#111; display:flex; flex-direction:column; height:100vh; }
-    .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:white; box-shadow:0 1px 0 rgba(0,0,0,.06); }
-    .title { font-weight:600; font-size:16px; }
-    .actions { display:flex; gap:8px; align-items:center; }
-    .btn { padding:8px 12px; border-radius:8px; border:1px solid #e0e0e6; background:white; cursor:pointer; font-size:14px; }
-    .btn.primary { background:#0067b8; color:white; border-color:#005aa0; }
-    .frame-wrap { flex:1; background:#e9edf3; padding:12px; box-sizing:border-box; }
-    .viewer { width:100%; height:100%; border:0; border-radius:8px; box-shadow:0 6px 22px rgba(12,20,40,0.08); }
-    .footer { text-align:center; padding:10px; font-size:14px; background:#fff; border-top:1px solid #ddd; }
-    .footer a { color:#0067b8; text-decoration:none; font-weight:500; }
-    .footer a:hover { text-decoration:underline; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: #f6f6f8;
+      color: #111;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: white;
+      box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    }
+    .title { font-weight: 600; font-size: 16px; }
+    #viewer {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      box-shadow: 0 6px 22px rgba(12,20,40,0.08);
+      border-radius: 8px;
+    }
+    .footer {
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      background: #fff;
+      border-top: 1px solid #ddd;
+    }
+    .footer a { color: #0067b8; text-decoration: none; font-weight: 500; }
+    .footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div class="title">Work document — viewer</div>
-    <div class="actions">
-      <button class="btn" id="openTab">Open raw link</button>
-      <button class="btn primary" id="reloadEmbed">Reload embed</button>
-    </div>
   </div>
 
-  <div class="frame-wrap">
-    <!-- Primary embed using OneDrive embed link -->
-    <iframe 
-      id="docViewer"
-      src="https://1drv.ms/w/c/dc8a3fde14495158/IQSbtGZ94vyvRLhgRDzFqruhAYeOifEXkYuOJAkC-uA8fYw?em=2&wdEmbedCode=0&wdPrint=0" 
-      width="100%" 
-      height="100%" 
-      style="min-height:100%; border:0;"
-      frameborder="0">
-      This is an embedded <a target="_blank" href="https://office.com">Microsoft Office</a> document, powered by 
-      <a target="_blank" href="https://office.com/webapps">Office</a>.
-    </iframe>
-  </div>
+  <div id="viewer"></div>
 
   <div class="footer">
-    Made by <strong>Vallabh Padhye</strong> | 
+    Made by <strong>Vallabh Padhye</strong> |
     <a href="https://www.linkedin.com/in/vallabhpadhye" target="_blank">LinkedIn</a>
   </div>
 
   <script>
-    const rawOneDriveLink = "https://1drv.ms/w/c/dc8a3fde14495158/EZu0Zn3i_K9EuGBEPMWqu6EBjC78jU8Q21Q7nrrKCln_jg";
-    document.getElementById('openTab').addEventListener('click', () => {
-      window.open(rawOneDriveLink, '_blank');
-    });
-    document.getElementById('reloadEmbed').addEventListener('click', () => {
-      const iframe = document.getElementById('docViewer');
-      const src = iframe.src;
-      iframe.src = 'about:blank';
-      setTimeout(() => iframe.src = src, 120);
-    });
+    // Fetch the docx file from public folder
+    fetch("DP100.docx")
+      .then(r => r.arrayBuffer())
+      .then(buffer => {
+        const container = document.getElementById("viewer");
+        window.docx.renderAsync(buffer, container, null);
+      })
+      .catch(err => {
+        document.getElementById("viewer").innerHTML = 
+          "<p style='color:red'>Failed to load document. Check file path.</p>";
+        console.error(err);
+      });
   </script>
 </body>
 </html>
