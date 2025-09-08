@@ -3,74 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Word Document Viewer</title>
-
-  <!-- docx-preview library -->
-  <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.1/dist/docx-preview.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docx-preview@0.3.1/dist/docx-preview.css"/>
-
+  <title>Work Document Viewer</title>
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      background: #f6f6f8;
-      color: #111;
-    }
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      background: white;
-      box-shadow: 0 1px 0 rgba(0,0,0,.06);
-    }
-    .title { font-weight: 600; font-size: 16px; }
-    #viewer {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-      background: white;
-      box-shadow: 0 6px 22px rgba(12,20,40,0.08);
-      border-radius: 8px;
-    }
-    .footer {
-      text-align: center;
-      padding: 12px;
-      font-size: 14px;
-      background: #fff;
-      border-top: 1px solid #ddd;
-    }
-    .footer a { color: #0067b8; text-decoration: none; font-weight: 500; }
-    .footer a:hover { text-decoration: underline; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:#f6f6f8; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:white; box-shadow:0 1px 0 rgba(0,0,0,.08); }
+    .title { font-weight:600; font-size:16px; }
+    .content { padding:12px; }
+    #container { background:white; border-radius:8px; padding:16px; box-shadow:0 2px 6px rgba(0,0,0,.1); }
   </style>
+  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+  <script src="https://unpkg.com/docx-preview/dist/docx-preview.min.js"></script>
 </head>
 <body>
   <div class="topbar">
-    <div class="title">Work document — viewer</div>
+    <div class="title">Work document — live view</div>
+    <a href="https://linkedin.com/in/vallabhpadhye" target="_blank">Made by Vallabh Padhye</a>
   </div>
 
-  <div id="viewer"></div>
-
-  <div class="footer">
-    Made by <strong>Vallabh Padhye</strong> |
-    <a href="https://www.linkedin.com/in/vallabhpadhye" target="_blank">LinkedIn</a>
+  <div class="content">
+    <div id="container"></div>
   </div>
 
   <script>
-  // Use the direct download link from OneDrive
-  const docUrl = "https://onedrive.live.com/:w:/g/personal/DC8A3FDE14495158/EZu0Zn3i_K9EuGBEPMWqu6EB-EmkNgFLDy-cYx0pO-eQ2w?resid=DC8A3FDE14495158!s7d66b49bfce244afb860443cc5aabba1&ithint=file%2Cdocx&e=Y0kAZe&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3cvYy9kYzhhM2ZkZTE0NDk1MTU4L0VadTBabjNpX0s5RXVHQkVQTVdxdTZFQi1FbWtOZ0ZMRHktY1l4MHBPLWVRMnc_ZT1ZMGtBWmU";
+    // Replace FILE_ID with your real Google Drive file ID
+    const fileUrl = "https://docs.google.com/document/d/1sfPYWwuWctNY7dTCsvVAS6NZ6-J0bn9o/export?format=docx&ouid=113283709368046164672&rtpof=true&sd=true";
 
-  fetch(docUrl)
-    .then(r => r.arrayBuffer())
-    .then(buffer => {
-      const container = document.getElementById("viewer");
-      window.docx.renderAsync(buffer, container, null);
-    })
-    .catch(err => {
-      document.getElementById("viewer").innerHTML =
-        "<p style='color:red'>Failed to load document. Check link & permissions.</p>";
-      console.error(err);
-    });
-</script>
+    fetch(fileUrl)
+      .then(res => res.blob())
+      .then(blob => {
+        const container = document.getElementById("container");
+        const docx = new window.docx_preview.DocxPreview();
+        docx.renderAsync(blob, container);
+      })
+      .catch(err => console.error("Failed to load document:", err));
+  </script>
 </body>
 </html>
