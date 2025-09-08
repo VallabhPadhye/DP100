@@ -10,9 +10,8 @@
     .title { font-weight:600; font-size:16px; }
     .content { padding:12px; }
     #container { background:white; border-radius:8px; padding:16px; box-shadow:0 2px 6px rgba(0,0,0,.1); }
+    iframe { width:100%; height:600px; border:none; border-radius:8px; }
   </style>
-  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
-  <script src="https://unpkg.com/docx-preview/dist/docx-preview.min.js"></script>
 </head>
 <body>
   <div class="topbar">
@@ -21,21 +20,9 @@
   </div>
 
   <div class="content">
-    <div id="container"></div>
+    <div id="container">
+      <iframe src="https://docs.google.com/document/d/1sfPYWwuWctNY7dTCsvVAS6NZ6-J0bn9o/preview"></iframe>
+    </div>
   </div>
-
-  <script>
-    // Replace FILE_ID with your real Google Drive file ID
-    const fileUrl = "https://docs.google.com/document/d/1sfPYWwuWctNY7dTCsvVAS6NZ6-J0bn9o/export?format=docx";
-
-    fetch(fileUrl)
-      .then(res => res.blob())
-      .then(blob => {
-        const container = document.getElementById("container");
-        const docx = new window.docx_preview.DocxPreview();
-        docx.renderAsync(blob, container);
-      })
-      .catch(err => console.error("Failed to load document:", err));
-  </script>
 </body>
 </html>
